@@ -2,6 +2,7 @@ use std::fs::read_to_string;
 use std::process::exit;
 use std::{env, io};
 use std::time::Instant;
+use rayon::prelude::*;
 
 // From Rust by example
 // Handle the error though
@@ -39,12 +40,10 @@ fn decode(code: &str) -> i32 {
 
 fn calibrate(codes: Vec<String>) -> i32 {
     // Find the calibration code for the Elves
-    let mut running_total = 0;
-    for code in codes {
-        let value = decode(&code);
-        running_total += value;
-    }
-    return running_total
+    return codes
+        .par_iter()
+        .map(|c| decode(c))
+        .sum();
 }
 
 fn parse_args() -> String {
