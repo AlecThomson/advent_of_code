@@ -6,7 +6,7 @@ use std::{env, io};
 // Handle the error though
 fn read_lines(filename: &str) -> Result<Vec<String>, io::Error> {
     let contents_result = read_to_string(filename);
-    let mut contents = match contents_result {
+    let contents = match contents_result {
         Ok(c) => c,
         Err(e) => return Err(e),
     };
