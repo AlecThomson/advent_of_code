@@ -1,16 +1,17 @@
 use std::fs::read_to_string;
+use std::process::exit;
 use std::{env, process, io};
 use std::io::ErrorKind;
 
 // From Rust by example
 // Handle the error though
 fn read_lines(filename: &str) -> Result<Vec<String>, io::Error> {
-    let reader = read_to_string(filename);
-    let mut reader = match reader {
-        Ok(file) => file,
+    let contents_result = read_to_string(filename);
+    let mut contents = match contents_result {
+        Ok(c) => c,
         Err(e) => return Err(e),
     };
-    Ok(reader.lines().map(String::from).collect())
+    Ok(contents.lines().map(String::from).collect())
 }
 
 fn decode(code: &str) -> i32 {
@@ -59,7 +60,14 @@ fn parse_args() -> String {
 fn main() {
     // Parse CLI
     let file_to_read = parse_args();
-    let codes = read_lines(&file_to_read);
+    let codes_result = read_lines(&file_to_read);
+    let codes = match codes_result {
+        Ok(c) => c,
+        Err(e) => {
+            println!("Error reading {}: {}", file_to_read, e);
+            exit(1)
+        }
+    };
     let calibration = calibrate(codes);
     println!("Calibration total is {}", calibration);
 
