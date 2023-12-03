@@ -35,7 +35,7 @@ fn decode(code: &str) -> i32 {
         }
     }
     let number_int: i32 = number_string.parse().unwrap();
-    return number_int
+    number_int
 }
 
 fn calibrate(codes: Vec<String>) -> i32 {
@@ -51,12 +51,12 @@ fn parse_args() -> String {
     let args: Vec<String> = env::args().collect();
     let file_to_read = 
         if args.len() > 1 {
-            String::from(args[1].clone())
+            args[1].clone()
     } else {
         String::from("tests/example.txt")
     };
     println!("Reading {}", file_to_read);
-    return file_to_read
+    file_to_read
 }
 
 fn main() {
