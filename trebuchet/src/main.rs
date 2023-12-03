@@ -14,6 +14,7 @@ fn read_lines(filename: &str) -> Result<Vec<String>, io::Error> {
 }
 
 fn decode(code: &str) -> i32 {
+    // Decode the elvish codes into numbers
     // String of letters and numbers
     // Return left-most and right-most numbers in code
     let mut number_string: String = "".to_owned();
@@ -36,6 +37,7 @@ fn decode(code: &str) -> i32 {
 }
 
 fn calibrate(codes: Vec<String>) -> i32 {
+    // Find the calibration code for the Elves
     let mut running_total = 0;
     for code in codes {
         let value = decode(&code);
@@ -45,6 +47,7 @@ fn calibrate(codes: Vec<String>) -> i32 {
 }
 
 fn parse_args() -> String {
+    // Parse the command line arguments
     let args: Vec<String> = env::args().collect();
     let file_to_read = 
         if args.len() > 1 {
@@ -57,7 +60,6 @@ fn parse_args() -> String {
 }
 
 fn main() {
-    // Parse CLI
     let file_to_read = parse_args();
     let codes_result = read_lines(&file_to_read);
     let codes = match codes_result {
