@@ -78,7 +78,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use crate::decode;
+    use crate::{decode, calibrate};
 
     #[test]
     fn test_decode() {
@@ -86,5 +86,20 @@ mod tests {
         assert_eq!(decode("pqr3stu8vwx"), 38);
         assert_eq!(decode("a1b2c3d4e5f"), 15);
         assert_eq!(decode("treb7uchet"), 77);
+    }
+    
+    #[test]
+    fn test_calibrate() {
+        assert_eq!(
+            calibrate(
+                vec![
+                    "1abc2".to_string(), 
+                    "pqr3stu8vwx".to_string(), 
+                    "a1b2c3d4e5f".to_string(), 
+                    "treb7uchet".to_string(),
+                ]
+            ),
+            142,
+        )
     }
 }
