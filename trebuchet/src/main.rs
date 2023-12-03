@@ -1,7 +1,6 @@
 use std::fs::read_to_string;
 use std::process::exit;
-use std::{env, process, io};
-use std::io::ErrorKind;
+use std::{env, io};
 
 // From Rust by example
 // Handle the error though
