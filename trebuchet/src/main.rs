@@ -1,6 +1,7 @@
 use std::fs::read_to_string;
 use std::process::exit;
 use std::{env, io};
+use std::time::{Duration, Instant};
 
 // From Rust by example
 // Handle the error though
@@ -60,6 +61,8 @@ fn parse_args() -> String {
 }
 
 fn main() {
+    let now = Instant::now();
+
     let file_to_read = parse_args();
     let codes_result = read_lines(&file_to_read);
     let codes = match codes_result {
@@ -71,8 +74,7 @@ fn main() {
     };
     let calibration = calibrate(codes);
     println!("Calibration total is {}", calibration);
-
-
+    println!("Execution took {}µs", now.elapsed().as_micros());
 }
 
 #[cfg(test)]
