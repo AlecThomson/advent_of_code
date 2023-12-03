@@ -1,7 +1,7 @@
 use std::fs::read_to_string;
 use std::process::exit;
 use std::{env, io};
-use std::time::{Instant};
+use std::time::Instant;
 
 // From Rust by example
 // Handle the error though
