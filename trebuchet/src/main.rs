@@ -38,7 +38,6 @@ fn text_to_number(code: String) -> String {
             |c| code.contains(c).to_owned()
         );
     if ! checks.any(|x| x) {
-        println!("No numbers found in {code}");
         return code
     }
     let mut new_code = code.clone();
@@ -87,6 +86,7 @@ fn decode(code: &str) -> i32 {
         }
     }
     let number_int: i32 = number_string.parse().unwrap();
+    assert!(number_int > 9 && number_int < 100, "Number {} is not between 10 and 99", number_int);
     number_int
 }
 
@@ -138,6 +138,11 @@ mod tests {
         assert_eq!(decode("pqr3stu8vwx"), 38);
         assert_eq!(decode("a1b2c3d4e5f"), 15);
         assert_eq!(decode("treb7uchet"), 77);
+        assert_eq!(decode("585"), 55);
+        // Test single digit numbers
+        assert_eq!(decode("1abc2"), 12);
+        assert_eq!(decode("asdoneasd"), 11);
+        // Test spelled out numbers
         assert_eq!(decode("two1nine"), 29);
         assert_eq!(decode("eightwothree"), 83);
         assert_eq!(decode("abcone2threexyz"), 13);
@@ -145,6 +150,8 @@ mod tests {
         assert_eq!(decode("4nineeightseven2"), 42);
         assert_eq!(decode("zoneight234"), 14);
         assert_eq!(decode("7pqrstsixteen"), 76);
+        // Cut off numbers
+        assert_eq!(decode("eightwo"), 82);
 
     }
 
@@ -160,6 +167,20 @@ mod tests {
                 ]
             ),
             142,
+        );
+        // Test spelled out numbers
+        assert_eq!(
+            calibrate(
+                vec![
+                "two1nine".to_string(), 
+                "eightwothree".to_string(), 
+                "abcone2threexyz".to_string(), 
+                "xtwone3four".to_string(),
+                "4nineeightseven2".to_string(),
+                "zoneight234".to_string(),
+                "7pqrstsixteen".to_string(),
+            ]),
+            281,
         )
     }
 
