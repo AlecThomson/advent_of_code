@@ -60,7 +60,7 @@ fn text_to_number(code: String) -> String {
         numbers[first_number.as_str()].to_string().as_str(),
     );
 
-    return text_to_number(new_code);
+    text_to_number(new_code)
 }
 
 fn decode(code: &str) -> i32 {
