@@ -4,6 +4,7 @@ use std::process::exit;
 use std::{env, io};
 use std::time::Instant;
 use rayon::prelude::*;
+use indexmap::IndexMap;
 
 // From Rust by example
 // Handle the error though
@@ -18,7 +19,7 @@ fn read_lines(filename: &str) -> Result<Vec<String>, io::Error> {
 
 // Find spelled out numbers
 fn text_to_number(code: String) -> String {
-    let numbers =  HashMap::from(
+    let numbers = IndexMap::from(
         [
             ("one", 1),
             ("two", 2),
@@ -31,7 +32,9 @@ fn text_to_number(code: String) -> String {
             ("nine", 9),
         ]
     );
-    let mut number_check =  HashMap::from(
+    let numbers_inverted: IndexMap<i32, &str> = numbers.iter()
+        .map(|(k, v)| (v.clone(), k.clone())).collect();
+    let mut number_check =  IndexMap::from(
         [
             ("one", false),
             ("two", false),
@@ -50,9 +53,19 @@ fn text_to_number(code: String) -> String {
     if ! number_check.values().any(|&x| x) {
         return code
     }
-    let values =  number_check.values();
-    println!("{values:?}");
+    // let values =  number_check.values();
+    // println!("{values:?}");
     let mut new_code = code.clone();
+    println!("number_check={number_check:?}");
+    for (i, &check) in number_check.values().enumerate() {
+        let num = i + 1;
+        if check {
+            new_code = new_code.replace(
+                numbers_inverted[i],
+                num.to_string().as_str(),
+            )
+        }
+    }
     // for (key, value )in numbers {
     //     if new_code.contains(key) {
     //         println!("{key}/{value} is in {new_code}");
