@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::fs::read_to_string;
 use std::process::exit;
 use std::{env, io};
@@ -13,6 +14,53 @@ fn read_lines(filename: &str) -> Result<Vec<String>, io::Error> {
         Err(e) => return Err(e),
     };
     Ok(contents.lines().map(String::from).collect())
+}
+
+// Find spelled out numbers
+fn text_to_number(code: String) -> String {
+    let numbers =  HashMap::from(
+        [
+            ("one", 1),
+            ("two", 2),
+            ("three", 3),
+            ("four", 4), 
+            ("five", 5),
+            ("six", 6), 
+            ("seven", 7),
+            ("eight", 8),
+            ("nine", 9),
+        ]
+    );
+    let mut number_check =  HashMap::from(
+        [
+            ("one", false),
+            ("two", false),
+            ("three", false),
+            ("four", false), 
+            ("five", false),
+            ("six", false), 
+            ("seven", false),
+            ("eight", false),
+            ("nine", false),
+        ]
+    );
+    for number in numbers.keys() {
+        number_check.insert(number, code.contains(number));
+    }
+    if ! number_check.values().any(|&x| x) {
+        return code
+    }
+    let values =  number_check.values();
+    println!("{values:?}");
+    let mut new_code = code.clone();
+    // for (key, value )in numbers {
+    //     if new_code.contains(key) {
+    //         println!("{key}/{value} is in {new_code}");
+    //         new_code = new_code.replace(key, value.to_string().as_str());
+    //         println!("new_code={new_code}");
+    //     }
+    // }
+    new_code
 }
 
 fn decode(code: &str) -> i32 {
@@ -78,7 +126,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use crate::{decode, calibrate};
+    use crate::{decode, calibrate, text_to_number};
 
     #[test]
     fn test_decode() {
@@ -87,7 +135,7 @@ mod tests {
         assert_eq!(decode("a1b2c3d4e5f"), 15);
         assert_eq!(decode("treb7uchet"), 77);
     }
-    
+
     #[test]
     fn test_calibrate() {
         assert_eq!(
@@ -101,5 +149,37 @@ mod tests {
             ),
             142,
         )
+    }
+
+    #[test]
+    fn test_text_to_number() {
+        assert_eq!(
+            text_to_number("two1nine".to_string()), 
+            "219".to_string()
+        );
+        assert_eq!(
+            text_to_number("eightwothree".to_string()), 
+            "8wo3".to_string()
+        );
+        assert_eq!(
+            text_to_number("abcone2threexyz".to_string()), 
+            "abc123xyz".to_string()
+        );
+        assert_eq!(
+            text_to_number("xtwone3four".to_string()), 
+            "x2ne34".to_string()
+        );
+        assert_eq!(
+            text_to_number("4nineeightseven2".to_string()), 
+            "49872".to_string()
+        );
+        assert_eq!(
+            text_to_number("zoneight234".to_string()), 
+            "z18234".to_string()
+        );
+        assert_eq!(
+            text_to_number("7pqrstsixteen".to_string()), 
+            "7pqrst6teen".to_string()
+        );
     }
 }
