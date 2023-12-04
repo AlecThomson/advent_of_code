@@ -32,48 +32,35 @@ fn text_to_number(code: String) -> String {
             ("nine", 9),
         ]
     );
-    let numbers_inverted: IndexMap<i32, &str> = numbers.iter()
-        .map(|(k, v)| (v.clone(), k.clone())).collect();
-    let mut number_check =  IndexMap::from(
-        [
-            ("one", false),
-            ("two", false),
-            ("three", false),
-            ("four", false), 
-            ("five", false),
-            ("six", false), 
-            ("seven", false),
-            ("eight", false),
-            ("nine", false),
-        ]
-    );
-    for number in numbers.keys() {
-        number_check.insert(number, code.contains(number));
-    }
-    if ! number_check.values().any(|&x| x) {
+    let mut checks = numbers
+        .keys()
+        .map(
+            |c| code.contains(c).to_owned()
+        );
+    if ! checks.any(|x| x) {
+        println!("No numbers found in {code}");
         return code
     }
-    // let values =  number_check.values();
-    // println!("{values:?}");
     let mut new_code = code.clone();
-    println!("number_check={number_check:?}");
-    for (i, &check) in number_check.values().enumerate() {
-        let num = i + 1;
-        if check {
-            new_code = new_code.replace(
-                numbers_inverted[i],
-                num.to_string().as_str(),
-            )
+    // Find the position of each number str in new_code
+    let mut number_positions: Vec<HashMap<String, usize>> = Vec::new();
+    for number in numbers.keys() {
+        if new_code.contains(number) {
+            let position = new_code.find(number).unwrap();
+            number_positions.push(HashMap::from([(number.to_string(), position)]));
         }
     }
-    // for (key, value )in numbers {
-    //     if new_code.contains(key) {
-    //         println!("{key}/{value} is in {new_code}");
-    //         new_code = new_code.replace(key, value.to_string().as_str());
-    //         println!("new_code={new_code}");
-    //     }
-    // }
-    new_code
+    // Sort the number_positions by position
+    number_positions.sort_by(|a, b| a.values().cmp(b.values()));
+    // Replace first number with number
+    let first_number = number_positions[0].keys().next().unwrap();
+
+    new_code = new_code.replace(
+        first_number,
+        numbers[first_number.as_str()].to_string().as_str(),
+    );
+
+    return text_to_number(new_code);
 }
 
 fn decode(code: &str) -> i32 {
@@ -188,7 +175,7 @@ mod tests {
         );
         assert_eq!(
             text_to_number("zoneight234".to_string()), 
-            "z18234".to_string()
+            "z1ight234".to_string()
         );
         assert_eq!(
             text_to_number("7pqrstsixteen".to_string()), 
