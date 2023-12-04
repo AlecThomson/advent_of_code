@@ -66,17 +66,21 @@ fn text_to_number(code: String) -> String {
 fn decode(code: &str) -> i32 {
     // Decode the elvish codes into numbers
     // String of letters and numbers
+
+    // First replace spelled out numbers with numbers
+    let new_code = text_to_number(code.to_string());
+    let new_code = new_code.as_str();
     // Return left-most and right-most numbers in code
     let mut number_string: String = "".to_owned();
     // Loop over 'code' to get left-most number
-    for c in code.chars() {
+    for c in new_code.chars() {
         if c.is_numeric() {
             number_string.push(c);
             break
         }
     }
-    // Loop over reversed 'code' to get right-most
-    for c in code.chars().rev() {
+    // Loop over reversed 'new_code' to get right-most
+    for c in new_code.chars().rev() {
         if c.is_numeric() {
             number_string.push(c);
             break
@@ -134,6 +138,14 @@ mod tests {
         assert_eq!(decode("pqr3stu8vwx"), 38);
         assert_eq!(decode("a1b2c3d4e5f"), 15);
         assert_eq!(decode("treb7uchet"), 77);
+        assert_eq!(decode("two1nine"), 29);
+        assert_eq!(decode("eightwothree"), 83);
+        assert_eq!(decode("abcone2threexyz"), 13);
+        assert_eq!(decode("xtwone3four"), 24);
+        assert_eq!(decode("4nineeightseven2"), 42);
+        assert_eq!(decode("zoneight234"), 14);
+        assert_eq!(decode("7pqrstsixteen"), 76);
+
     }
 
     #[test]
