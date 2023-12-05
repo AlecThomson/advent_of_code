@@ -192,7 +192,7 @@ mod tests {
         );
         assert_eq!(
             text_to_number("eightwothree".to_string()), 
-            "8wo3".to_string()
+            "823".to_string()
         );
         assert_eq!(
             text_to_number("abcone2threexyz".to_string()), 
@@ -200,7 +200,7 @@ mod tests {
         );
         assert_eq!(
             text_to_number("xtwone3four".to_string()), 
-            "x2ne34".to_string()
+            "x2134".to_string()
         );
         assert_eq!(
             text_to_number("4nineeightseven2".to_string()), 
@@ -208,7 +208,7 @@ mod tests {
         );
         assert_eq!(
             text_to_number("zoneight234".to_string()), 
-            "z1ight234".to_string()
+            "z18234".to_string()
         );
         assert_eq!(
             text_to_number("7pqrstsixteen".to_string()), 
